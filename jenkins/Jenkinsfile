@@ -3,7 +3,15 @@ pipeline{
     stages {
         stage('build') {
             steps{ 
-                echo 'building the application'
+                sh 'mvn -B -DskipTests clean package'
+            }
+            post {
+                success {
+                    archiveArtifacts artifacts: '**/target/*.war', fingerprint: true
+                }
+                failure {
+                    echo 'build failed'
+                }
             }
         }
         stage('test') {
