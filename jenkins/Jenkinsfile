@@ -5,6 +5,10 @@ pipeline{
     maven 'Test Maven'
     }
 
+    parameters {
+        choice choices: ['Dev ', 'Prod'], name: 'Environment'
+    }
+
     stages {
         stage('build') {
             steps{ 
@@ -17,28 +21,42 @@ pipeline{
                 stage('unit test'){
                     steps{
                         echo 'running unit test'
+                        sh 'mvn test'
                     }
                 }
                 stage('integration test'){
                     steps{
                         echo 'running integration test'
+                        sh 'mvn test'
                     }
                 }
             }
 
              post {
                 success {
-                    archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+                    //archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
+                    dir('stash/target'){
+                        stash name: 'maven-build', include: '*.jar'
+                    }
                 }
                 failure {
                     echo 'build failed'
                 }
             }
         }
-        stage('deploy') {
-            steps{
-                echo 'deploying the application'
+        stage('deploy_dev') {
+            when {
+                expression {
+                    params.Environment == 'Dev'
+                }
+                beforeAgent true
             }
+            steps{
+                dir('/unstash/target'){
+                    unstash 'maven-build'
+                }
+            }
+                
         }
         
     }
