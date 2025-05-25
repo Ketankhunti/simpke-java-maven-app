@@ -14,7 +14,7 @@ pipeline{
             steps{ 
 
                 script{
-                    file = load 'script.groovy'
+                    file = load "${env.WORKSPACE}/script.groovy"
                     file.hello()
                 }
                 sh 'mvn -B -DskipTests clean package'
