@@ -12,6 +12,10 @@ pipeline{
     stages {
         stage('build') {
             steps{ 
+
+                script{
+                    hello()
+                }
                 sh 'mvn -B -DskipTests clean package'
             }
         }
@@ -44,7 +48,7 @@ pipeline{
                 }
             }
         }
-        stage('deploy_dev') {
+        stage('deploy_Prod') {
             when {
                 expression {
                     params.Environment == 'Prod'
@@ -52,9 +56,14 @@ pipeline{
                 beforeAgent true
             }
             steps{
+
+                timeout(time: 3, unit: 'DAYS') {
+                    input message: 'Are you sure you want to deploy to Prod?', ok: 'Yes', submitter: 'admin'
+                }
                 dir('target'){
                     unstash 'maven-build'
                 }
+
             }
                 
         }
