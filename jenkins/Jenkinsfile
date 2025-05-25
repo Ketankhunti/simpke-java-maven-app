@@ -5,9 +5,9 @@ pipeline{
     maven 'Test Maven'
     }
 
-    parameters {
-        choice choices: ['Dev', 'Prod'], name: 'Environment'
-    }
+    // parameters {
+    //     choice choices: ['Dev', 'Prod'], name: 'Environment'
+    // }
 
     stages {
         stage('build') {
