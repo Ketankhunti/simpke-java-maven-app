@@ -47,7 +47,7 @@ pipeline{
         stage('deploy_dev') {
             when {
                 expression {
-                    params.Environment == 'Dev'
+                    params.Environment == 'Prod'
                 }
                 beforeAgent true
             }
