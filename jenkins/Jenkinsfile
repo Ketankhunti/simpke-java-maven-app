@@ -26,10 +26,6 @@ pipeline{
                 }
             }
 
-            steps{
-                echo 'testing the application'
-            }
-
              post {
                 success {
                     archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
