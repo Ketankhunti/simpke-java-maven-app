@@ -49,12 +49,33 @@ pipeline{
                 }
             }
         }
+
+        stage('deploy_Dev') {
+            when {
+                // expression {
+                //     params.Environment == 'Dev'
+                // }
+                beforeAgent true
+
+                branch 'develop'
+            }
+            steps{
+                dir('target'){
+                    unstash 'maven-build'
+                }
+
+            }
+                
+        }
+
         stage('deploy_Prod') {
             when {
-                expression {
-                    params.Environment == 'Prod'
-                }
+                // expression {
+                //     params.Environment == 'Prod'
+                // }
                 beforeAgent true
+
+                branch 'main'
             }
             steps{
 
