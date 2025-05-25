@@ -35,7 +35,7 @@ pipeline{
              post {
                 success {
                     //archiveArtifacts artifacts: '**/target/*.jar', fingerprint: true
-                    dir('stash/target'){
+                    dir('./stash/target'){
                         stash name: 'maven-build', includes: '*.jar'
                     }
                 }
